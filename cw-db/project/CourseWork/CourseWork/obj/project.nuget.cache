@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ZP8/A2tUXsoJTpMc52yhswHwrfBMKxjs3ImI/ZPeDXtK0FZhuZD5Ds1FIGFhJFbFnUhnX6MY6qpcXmZkAn1Czg==",
+  "dgSpecHash": "wxFMyx0LHtOLVxRASj5VcDlqy9AiJXtSJ5+BMMx5N4mxuX3hhDsrTPOcRmmGdwsK8vLv1eVmuH+MROqwoAsE8Q==",
   "success": true,
-  "projectFilePath": "C:\\git\\CourseWork-DataBases\\curse'овая бд\\project\\CourseWork\\CourseWork\\CourseWork.csproj",
+  "projectFilePath": "C:\\git\\CourseWork-DataBases\\cw-db\\project\\CourseWork\\CourseWork\\CourseWork.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\MSI\\.nuget\\packages\\bouncycastle.netcore\\1.8.5\\bouncycastle.netcore.1.8.5.nupkg.sha512",
     "C:\\Users\\MSI\\.nuget\\packages\\google.protobuf\\3.14.0\\google.protobuf.3.14.0.nupkg.sha512",

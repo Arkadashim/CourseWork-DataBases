@@ -27,3 +27,32 @@ C:\Users\MSI\Desktop\common\учеба\curse'овая бд\project\CourseWork\Co
 C:\Users\MSI\Desktop\common\учеба\curse'овая бд\project\CourseWork\CourseWork\obj\Debug\net5.0-windows\CourseWork.csproj.CopyComplete
 C:\Users\MSI\Desktop\common\учеба\curse'овая бд\project\CourseWork\CourseWork\obj\Debug\net5.0-windows\CourseWork.Properties.Resources.resources
 C:\Users\MSI\Desktop\common\учеба\curse'овая бд\project\CourseWork\CourseWork\obj\Debug\net5.0-windows\CourseWork.SetResultForm.resources
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\bin\Debug\net5.0-windows\CourseWork.exe
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\bin\Debug\net5.0-windows\CourseWork.deps.json
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\bin\Debug\net5.0-windows\CourseWork.runtimeconfig.json
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\bin\Debug\net5.0-windows\CourseWork.runtimeconfig.dev.json
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\bin\Debug\net5.0-windows\CourseWork.dll
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\bin\Debug\net5.0-windows\ref\CourseWork.dll
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\bin\Debug\net5.0-windows\CourseWork.pdb
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\bin\Debug\net5.0-windows\BouncyCastle.Crypto.dll
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\bin\Debug\net5.0-windows\Google.Protobuf.dll
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\bin\Debug\net5.0-windows\K4os.Compression.LZ4.dll
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\bin\Debug\net5.0-windows\K4os.Compression.LZ4.Streams.dll
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\bin\Debug\net5.0-windows\K4os.Hash.xxHash.dll
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\bin\Debug\net5.0-windows\MySql.Data.dll
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\bin\Debug\net5.0-windows\Ubiety.Dns.Core.dll
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\bin\Debug\net5.0-windows\ZstdNet.dll
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\obj\Debug\net5.0-windows\CourseWork.csprojAssemblyReference.cache
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\obj\Debug\net5.0-windows\CourseWork.MainForm.resources
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\obj\Debug\net5.0-windows\CourseWork.Properties.Resources.resources
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\obj\Debug\net5.0-windows\CourseWork.SetResultForm.resources
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\obj\Debug\net5.0-windows\CourseWork.csproj.GenerateResource.cache
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\obj\Debug\net5.0-windows\CourseWork.GeneratedMSBuildEditorConfig.editorconfig
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\obj\Debug\net5.0-windows\CourseWork.AssemblyInfoInputs.cache
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\obj\Debug\net5.0-windows\CourseWork.AssemblyInfo.cs
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\obj\Debug\net5.0-windows\CourseWork.csproj.CoreCompileInputs.cache
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\obj\Debug\net5.0-windows\CourseWork.csproj.CopyComplete
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\obj\Debug\net5.0-windows\CourseWork.dll
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\obj\Debug\net5.0-windows\ref\CourseWork.dll
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\obj\Debug\net5.0-windows\CourseWork.pdb
+C:\git\CourseWork-DataBases\cw-db\project\CourseWork\CourseWork\obj\Debug\net5.0-windows\CourseWork.genruntimeconfig.cache

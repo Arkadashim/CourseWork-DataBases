@@ -34,12 +34,15 @@ namespace CourseWork
 
                 InitializeReviewersGrid();
 
+                InitializeGroupDataGrid();
+
+                InitializeThemesGrid();
+
             }
             catch (Exception exc)
             {
                 MessageBox.Show(exc.Message);
             }
-
 
         }
 
@@ -298,7 +301,9 @@ namespace CourseWork
         {
             string q = "SELECT `s`.`id` as ID, concat(`s`.`surname`,' ',`s`.`name`,' ',`s`.`patronymic`) as Student," +
                 " `g`.`name` as 'Group', `get_theme_by_its_id`(`s`.`idtheme`) as 'Theme' from `students` `s` join `groups` `g`" +
-                " on (`s`.`idgroup`=`g`.`id`)";
+                " on (`s`.`idgroup`=`g`.`id`) WHERE 1";
+
+            if (SearchTB.Text != "") q += $" AND is_like_name(`s`.`surname`, `s`.`name`, `s`.`patronymic`, '{SearchTB.Text}')";
 
             mDA.SelectCommand = new MySqlCommand(q, conn);
             DataTable students = new DataTable();
@@ -546,6 +551,29 @@ namespace CourseWork
             }
             else MessageBox.Show("There are no free themes, add new then try again.");
         }
+        private void SearchTB_TextChanged(object sender, EventArgs e)
+        {
+            if (SearchTB.Text == "")
+            {
+                SearchB.Enabled = false;
+                CancelSearchB.Enabled = false;
+                InitializeStudentGrid();
+            }
+            else
+            {
+                SearchB.Enabled = true;
+                CancelSearchB.Enabled = true;
+            }
+        }
+        private void SearchB_Click(object sender, EventArgs e)
+        {
+            InitializeStudentGrid();
+        }
+
+        private void CancelSearchB_Click(object sender, EventArgs e)
+        {
+            SearchTB.Text = "";
+        }
 
         /////////////////tab 3/////////////////
         ///
@@ -557,7 +585,8 @@ namespace CourseWork
 
         private void InitializeReviewersGrid()
         {
-            string q = "SELECT `id`,concat(`surname`,' ',`name`,' ',`patronymic`) as Revirewer from `coursework`.`reviewers`";
+            string q = "SELECT `id`,concat(`surname`,' ',`name`,' ',`patronymic`) as Revirewer from `coursework`.`reviewers` WHERE 1";
+            if (SearchRevTB.Text != "") q += $" AND is_like_name(`surname`, `name`, `patronymic`, '{SearchRevTB.Text}')";
 
             mDA.SelectCommand = new MySqlCommand(q, conn);
             DataTable rev = new DataTable();
@@ -808,6 +837,303 @@ namespace CourseWork
             c2.Add(tb3);
 
             SetEditRevGroupBox(c2);
+        }
+
+        private void SearchRevTB_TextChanged(object sender, EventArgs e)
+        {
+            if (SearchRevTB.Text != "")
+            {
+                SearchRevB.Enabled = true;
+                CancelSearchRevB.Enabled = true;
+            }
+            else
+            {
+                SearchRevB.Enabled = false;
+                CancelSearchRevB.Enabled = false;
+                InitializeReviewersGrid();
+            }
+        }
+
+        private void SearchRevB_Click(object sender, EventArgs e)
+        {
+            InitializeReviewersGrid();
+        }
+
+        private void CancelSearchRevB_Click(object sender, EventArgs e)
+        {
+            SearchRevTB.Text = "";
+        }
+
+        /////////////////////////////tab 4///////////////////////////////
+        ///
+
+        private DataTable tempRev;
+        private void InitializeGroupDataGrid()
+        {
+            string q = "SELECT `g`.`id`,`g`.`name` AS 'Group',`r`.`id`,concat(`r`.`surname`,' ',left(`r`.`name`,1),'.',left(`r`.`patronymic`,1),'.')" +
+                " AS 'Professor' FROM `groups` `g` JOIN `reviewers` `r` ON (`g`.`idreviewer` = `r`.`id`) WHERE 1";
+            if (SearchGroupTextBox.Text != "") q += $" AND `g`.`name` LIKE '%{SearchGroupTextBox.Text}%'";
+
+            mDA.SelectCommand = new MySqlCommand(q, conn);
+            DataTable groups = new DataTable();
+            mDA.Fill(groups);
+
+            GroupsDataGrid.DataSource = groups;
+            GroupsDataGrid.Columns[0].Visible = false;
+            GroupsDataGrid.Columns[2].Visible = false;
+            GroupsDataGrid.Columns[3].Width = GroupsDataGrid.Width - GroupsDataGrid.RowHeadersWidth - GroupsDataGrid.Columns[1].Width - 2;
+        }
+
+        private void SetGroupPanel(string status)
+        {
+            StatusGroupLabel.Text = status;
+            GroupNameTextBox.Text = "";
+            GroupsComboBox.Items.Clear();
+
+            if (!GroupNameTextBox.Enabled && !GroupsComboBox.Enabled)
+            {
+                GroupNameTextBox.Enabled = true;
+                GroupsComboBox.Enabled = true;
+            }
+
+            string q = "SELECT `id`, concat(`surname`,' ',left(`name`,1),'.',left(`patronymic`,1),'.') FROM `reviewers`";
+            tempRev = new DataTable();
+            mDA.SelectCommand = new MySqlCommand(q, conn);
+            mDA.Fill(tempRev);
+
+            foreach (DataRow dr in tempRev.Rows) GroupsComboBox.Items.Add(dr.ItemArray[1].ToString());
+
+            switch(status)
+            {
+                case "Addition":
+                    break;
+                case "Editing":
+                    GroupNameTextBox.Text = GroupsDataGrid.CurrentRow.Cells[1].ToolTipText;
+                    GroupsComboBox.SelectedItem = GroupsDataGrid.CurrentRow.Cells[3].ToolTipText;
+                    break;
+                case "Removing":
+                    GroupNameTextBox.Text = GroupsDataGrid.CurrentRow.Cells[1].ToolTipText;
+                    GroupsComboBox.SelectedItem = GroupsDataGrid.CurrentRow.Cells[3].ToolTipText;
+
+                    GroupNameTextBox.Enabled = false;
+                    GroupsComboBox.Enabled = false;
+                    break;
+            }
+            GroupsPanel.Visible = true;
+        }
+
+        private void EditGroupButton_Click(object sender, EventArgs e)
+        {
+            SetGroupPanel("Editing");
+        }
+
+        private void AddGroupButton_Click(object sender, EventArgs e)
+        {
+            SetGroupPanel("Addition");
+        }
+
+        private void RemoveGroupButton_Click(object sender, EventArgs e)
+        {
+            SetGroupPanel("Removing");
+        }
+
+        private void AcceptGroupsButton_Click(object sender, EventArgs e)
+        {
+            if (GroupsComboBox.SelectedItem != null && GroupNameTextBox.Text != "")
+            {
+                string q = "";
+                string idnewrev = "";
+                if (StatusGroupLabel.Text != "Removing")
+                {
+                    foreach (DataRow dr in tempRev.Rows) if (dr.ItemArray[1].ToString() == GroupsComboBox.SelectedItem.ToString()) 
+                            idnewrev = dr.ItemArray[0].ToString();
+                }
+
+                switch (StatusGroupLabel.Text)
+                {
+                    case "Addition":
+                        q = $"INSERT INTO `coursework`.`groups` (`name`, `idreviewer`) VALUES ('{GroupNameTextBox.Text}', '{idnewrev}')";
+                        break;
+                    case "Editing":
+                        q = $"UPDATE `coursework`.`groups` SET `name` = '{GroupNameTextBox.Text}', `idreviewer` = '{idnewrev}' " +
+                            $"WHERE (`id` = '{GroupsDataGrid.CurrentRow.Cells[0].ToolTipText}')";
+                        break;
+                    case "Removing":
+                        q = $"DELETE FROM `coursework`.`groups` WHERE (`id` = '{GroupsDataGrid.CurrentRow.Cells[0].ToolTipText}');";
+                        break;
+                }
+
+                MySqlCommand cmd = new MySqlCommand(q, conn);
+                cmd.ExecuteNonQuery();
+
+                InitializeGroupBox();
+            }
+            else MessageBox.Show("Incorrect input.");
+        }
+
+        private void CancelGroupsButton_Click(object sender, EventArgs e)
+        {
+            GroupsPanel.Visible = false;
+        }
+
+        private void SearchGroupTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (SearchGroupTextBox.Text == "")
+            {
+                SearchGroupButton.Enabled = false;
+                CancelSearchGroupButton.Enabled = false;
+                InitializeGroupDataGrid();
+            } else
+            {
+                SearchGroupButton.Enabled = true;
+                CancelSearchGroupButton.Enabled = true;
+            }
+        }
+
+        private void SearchGroupButton_Click(object sender, EventArgs e)
+        {
+            InitializeGroupDataGrid();
+        }
+
+        private void CancelSearchGroupButton_Click(object sender, EventArgs e)
+        {
+            SearchGroupTextBox.Text = "";
+        }
+        private void GroupsDataGrid_SelectionChanged(object sender, EventArgs e)
+        {
+            CancelGroupsButton_Click(sender, e);
+        }
+
+        ///////////////////////// tab 5 ///////////////////////
+        ///
+        private void InitializeThemesGrid()
+        {
+            string q = "SELECT `id`,`theme`, if(`status` = 0, '✓','x') AS 'Status' FROM `workthemes` WHERE 1";
+            if (SearchThemeTextBox.Text != "") q += $" AND `theme` LIKE '%{SearchThemeTextBox.Text}%'";
+            if (FreeRadioButton.Checked) q += " AND `status` = '0'";
+            if (BusyRadioButton.Checked) q += " AND `status` = '1'";
+
+            mDA.SelectCommand = new MySqlCommand(q, conn);
+            DataTable themes = new DataTable();
+            mDA.Fill(themes);
+
+            ThemesGrid.DataSource = themes;
+            ThemesGrid.Columns[0].Visible = false;
+            ThemesGrid.Columns[1].Width = ThemesGrid.Width - (ThemesGrid.RowHeadersWidth + ThemesGrid.Columns[2].Width + 10);
+            ThemesGrid.Columns[2].Width = 50;
+
+            if (ThemesGrid.Rows.Count == 0)
+            {
+                EditThemeButton.Enabled = false;
+                RemoveThemeButton.Enabled = false;
+            } else if(!EditThemeButton.Enabled && !RemoveThemeButton.Enabled)
+            {
+                EditThemeButton.Enabled = true;
+                RemoveThemeButton.Enabled = true;
+            }
+        }
+
+        private void SearchThemeTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (SearchThemeTextBox.Text == "")
+            {
+                SearchThemeButton.Enabled = false;
+                CancelSearchThemeButton.Enabled = false;
+                InitializeThemesGrid();
+            }
+            else
+            {
+                SearchThemeButton.Enabled = true;
+                CancelSearchThemeButton.Enabled = true;
+            }
+        }
+
+        private void SearchThemeButton_Click(object sender, EventArgs e)
+        {
+            InitializeThemesGrid();
+        }
+
+        private void CancelSearchThemeButton_Click(object sender, EventArgs e)
+        {
+            SearchThemeTextBox.Text = "";
+        }
+
+        private void EditThemeButton_Click(object sender, EventArgs e)
+        {
+            ThemeSetLabel.Text = "Editing";
+            ThemeTextBox.Tag = "Edit";
+            ThemeTextBox.Text = "";
+            ThemesPanel.Visible = true;
+        }
+
+        private void AddThemeButton_Click(object sender, EventArgs e)
+        {
+            ThemeSetLabel.Text = "Addition";
+            ThemeTextBox.Tag = "Add";
+            ThemeTextBox.Text = "";
+            ThemesPanel.Visible = true;
+        }
+
+        private void ThemeAcceptButton_Click(object sender, EventArgs e)
+        {
+            if (ThemeTextBox.Text != "")
+            {
+                string q = "";
+                switch (ThemeTextBox.Tag)
+                {
+                    case "Add":
+                        q = $"INSERT INTO `coursework`.`workthemes` (`theme`) VALUES ('{ThemeTextBox.Text}');";
+                        break;
+                    case "Edit":
+                        q = $"UPDATE `coursework`.`workthemes` SET `theme` = '{ThemeTextBox.Text}' " +
+                            $"WHERE (`id` = '{ThemesGrid.CurrentRow.Cells[0].ToolTipText}');";
+                        break;
+                }
+
+                MySqlCommand cmd = new MySqlCommand(q, conn);
+                cmd.ExecuteNonQuery();
+                InitializeThemesGrid();
+            }
+            else MessageBox.Show("Insert new Theme.");
+        }
+
+        private void ThemeCancelButton_Click(object sender, EventArgs e)
+        {
+            ThemesPanel.Visible = false;
+        }
+
+        private void RemoveThemeButton_Click(object sender, EventArgs e)
+        {
+            if (ThemesGrid.CurrentRow.Cells[2].ToolTipText == "✓")
+            {
+                string q = $"DELETE FROM `coursework`.`workthemes` WHERE (`id` = '{ThemesGrid.CurrentRow.Cells[0].ToolTipText}')";
+
+                MySqlCommand cmd = new MySqlCommand(q, conn);
+                cmd.ExecuteNonQuery();
+
+                InitializeThemesGrid();
+            }
+            else MessageBox.Show("You can't delete busy theme.");
+        }
+
+        private void ThemesGrid_SelectionChanged(object sender, EventArgs e)
+        {
+            CancelGroupsButton_Click(sender, e);
+        }
+
+        private void AllRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            InitializeThemesGrid();
+        }
+
+        private void FreeRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            InitializeThemesGrid();
+        }
+
+        private void BusyRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            InitializeThemesGrid();
         }
     }
 }
